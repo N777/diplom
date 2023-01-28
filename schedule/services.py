@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 
 import requests
@@ -5,10 +6,18 @@ import requests
 from schedule.models import Timetable, Lesson, Room, Teacher, Group
 
 
+LESSON_TYPES = {
+    'пр': 'practice',
+    'Лаб': 'laboratory',
+    'лек': 'lecture'
+}
+
 @dataclass
 class ApiLesson:
     name_lesson: str = None
+    type_lesson: str = None
     group: str = None
+    subgroup: int = None
     teacher: str = None
     room: str = None
 
@@ -61,7 +70,9 @@ class TimetableParseService:
         group, created = Group.objects.get_or_create(name=timetable.lesson.group)
         Timetable.objects.create(
             lesson=lesson,
+            lesson_type=timetable.lesson.type_lesson,
             group=group,
+            subgroup=timetable.lesson.subgroup,
             teacher=teacher,
             room=room,
             day=timetable.day,
@@ -70,9 +81,19 @@ class TimetableParseService:
         )
 
     def parse_lesson(self, lesson: dict) -> ApiLesson:
+        type_lesson, name_lesson = lesson['nameOfLesson'].split('.')
+        find_subgroup = re.search(r'\D+- +\d', name_lesson)
+        subgroup = None
+        if find_subgroup:
+            name_lesson = find_subgroup
+            subgroup = int(name_lesson[0][-1])
+            name_lesson = name_lesson[0][:-3]
+        #name_lesson, subgroup = name_lesson.split('-') #TODO учесть кейс 2 тире "тайм-менеджмент- 2 п/г"
         return ApiLesson(
-            name_lesson=lesson['nameOfLesson'],
+            name_lesson=name_lesson,
+            type_lesson=LESSON_TYPES[type_lesson],
             group=lesson['group'],
+            subgroup=subgroup,
             room=lesson['room'],
             teacher=lesson['teacher'],
         )

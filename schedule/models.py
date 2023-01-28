@@ -44,7 +44,9 @@ class Room(models.Model):
 
 class Timetable(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.DO_NOTHING)
+    lesson_type = models.CharField(max_length=255)
     group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
+    subgroup = models.IntegerField(null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.DO_NOTHING)
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
     day = models.IntegerField(choices=DaysOfWeek.choices)
