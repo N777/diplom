@@ -1,4 +1,5 @@
 <script>
+import { useStore } from "vuex";
 export default {
   data() {
     return {
@@ -9,8 +10,13 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.$store.dispatch("GET_TIMETABLE");
+  },
   methods: {
     addUser() {
+      this.$store.commit("increment");
+      console.log(this.$store.state.count);
       this.users.push({
         name: "Rtrd",
         age: 15,
