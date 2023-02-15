@@ -5,6 +5,13 @@ import Axios from "axios";
 import "./assets/main.css";
 
 import { createStore } from "vuex";
+import type { Timetable } from "@/interfaces";
+import { state } from "vue-tsc/out/shared";
+
+export interface State {
+  count: number;
+  timetable?: Timetable;
+}
 
 // Create a new store instance.
 const store = createStore({
@@ -20,12 +27,17 @@ const store = createStore({
       state.timetable = payload;
     },
   },
+  getters: {
+    TIMETABLE(state) {
+      return state.timetable;
+    },
+  },
   actions: {
-    GET_TIMETABLE: async (context) => {
+    GET_TIMETABLE({ commit }) {
       return Axios.get(
         "http://127.0.0.1:8000/api/timetable/?search=ИВТАПбд-21"
       ).then((res) => {
-        context.commit("SET_TODO", res.data);
+        commit("SET_TODO", res.data);
       });
     },
   },

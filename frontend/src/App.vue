@@ -1,6 +1,19 @@
+<template>
+  <main>
+    <div>
+      <VTable :timetable="TIMETABLE"></VTable>
+      <VTable></VTable>
+    </div>
+  </main>
+</template>
+
 <script>
-import { useStore } from "vuex";
+import VTable from "@/components/VTable.vue";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
+  components: { VTable },
+
   data() {
     return {
       users: [
@@ -11,9 +24,17 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("GET_TIMETABLE");
+    this.GET_TIMETABLE();
+  },
+  computed: {
+    ...mapGetters(["TIMETABLE"]),
   },
   methods: {
+    ...mapActions(["GET_TIMETABLE"]),
+    getTimeTableForWeek(week) {
+      debugger;
+      return this.TIMETABLE.filter((lesson) => lesson.week === week);
+    },
     addUser() {
       this.$store.commit("increment");
       console.log(this.$store.state.count);
@@ -25,17 +46,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <main>
-    <div>
-      <button @click="addUser"></button>
-      <ul>
-        <li v-for="user in users" :key="user.name">
-          {{ user.name }}
-          {{ user.age }}
-        </li>
-      </ul>
-    </div>
-  </main>
-</template>
