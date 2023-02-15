@@ -1,12 +1,10 @@
 <template>
   <main>
     <div>
-      <VTable :timetable="TIMETABLE"></VTable>
-      <VTable></VTable>
+      <VTable v-if="TIMETABLE" v-for="week in 2" :timetable="getTimeTableForWeek(week-1)" :weekNumber="week-1"></VTable>
     </div>
   </main>
 </template>
-
 <script>
 import VTable from "@/components/VTable.vue";
 import { mapActions, mapGetters } from "vuex";
@@ -14,16 +12,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   components: { VTable },
 
-  data() {
-    return {
-      users: [
-        { name: "qwe", age: 12 },
-        { name: "qw8", age: 15 },
-        { name: "qw7", age: 19 },
-      ],
-    };
-  },
-  mounted() {
+  beforeMount() {
     this.GET_TIMETABLE();
   },
   computed: {
@@ -32,16 +21,11 @@ export default {
   methods: {
     ...mapActions(["GET_TIMETABLE"]),
     getTimeTableForWeek(week) {
-      debugger;
       return this.TIMETABLE.filter((lesson) => lesson.week === week);
     },
     addUser() {
       this.$store.commit("increment");
       console.log(this.$store.state.count);
-      this.users.push({
-        name: "Rtrd",
-        age: 15,
-      });
     },
   },
 };
