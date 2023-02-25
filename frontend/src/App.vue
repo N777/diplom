@@ -1,7 +1,12 @@
 <template>
   <main>
     <div>
-      <VTable v-if="TIMETABLE" v-for="week in 2" :timetable="getTimeTableForWeek(week-1)" :weekNumber="week-1"></VTable>
+      <VTable
+        v-if="TIMETABLE"
+        v-for="week in 2"
+        :timetable="getTimeTableForWeek(week - 1)"
+        :weekNumber="week - 1"
+      ></VTable>
     </div>
   </main>
 </template>
@@ -10,10 +15,17 @@ import VTable from "@/components/VTable.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  components: { VTable },
+  components: {
+    VTable,
+    props: {
+      type: String,
+      name: String,
+    },
+  },
 
-  beforeMount() {
-    this.GET_TIMETABLE();
+  mounted() {
+    debugger;
+    this.GET_TIMETABLE(this.$route.params.name);
   },
   computed: {
     ...mapGetters(["TIMETABLE"]),
