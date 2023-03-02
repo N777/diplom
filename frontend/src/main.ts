@@ -14,8 +14,11 @@ export interface State {
 }
 
 const routes = [
-  { path: "/", component: App },
-  { path: "/:type/:name", component: App, props: true },
+  {
+    path: "/:type/:name",
+    component: () => import("@/components/VTimeTable.vue"),
+    props: true,
+  },
 ];
 
 const router = createRouter({
