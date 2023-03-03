@@ -1,18 +1,13 @@
 <template>
-  <div class="lesson">
-    <div v-if="timetable">
-      {{timetable.lesson_name}}
-    </div>
-  </div>
-
+  <v-col class="lesson" v-if="timetable">
+    {{ timetable.lesson_name }}
+  </v-col>
+  <v-spacer class="lesson" v-else></v-spacer>
 </template>
 
 <style>
 .lesson {
-  height: 100px;
-  border: 1px solid white;
-  min-width: calc(100% /9) ;
-  margin: 2px;
+  border: 1px solid black;
 }
 </style>
 

@@ -18,8 +18,7 @@ export default {
   },
 
   mounted() {
-    debugger;
-    this.GET_TIMETABLE(this.name);
+    this.GET_TIMETABLE(this.$route.params.name);
   },
   computed: {
     ...mapGetters(["TIMETABLE"]),

@@ -46,7 +46,7 @@ const store = createStore({
     },
   },
   actions: {
-    GET_TIMETABLE({ commit }, { group }) {
+    GET_TIMETABLE({ commit }, group) {
       return Axios.get(
         `http://127.0.0.1:8000/api/timetable/?search=${group}`
       ).then((res) => {
@@ -56,7 +56,27 @@ const store = createStore({
   },
 });
 
+// Vuetify
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  icons: {
+    defaultSet: "mdi",
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
+});
+
 const app = createApp(App);
 app.use(store);
 app.use(router);
+app.use(vuetify);
 app.mount("#app");

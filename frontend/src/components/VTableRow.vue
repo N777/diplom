@@ -1,21 +1,16 @@
 <template>
-  <div class="day">
-    <div class="lesson">{{ getDayName(dayNumber - 1) }}</div>
+  <v-row no-gutters>
+    <v-col class="lesson">{{ getDayName(dayNumber - 1) }}</v-col>
     <VTableCell
       v-for="number in 8"
       :key="number"
       :timetable="getTimeTableForLesson(number)"
     >
     </VTableCell>
-  </div>
+  </v-row>
 </template>
 
-<style>
-.day {
-  display: flex;
-  margin: 5px;
-}
-</style>
+<style></style>
 
 <script>
 import VTableCell from "@/components/VTableCell.vue";

@@ -1,27 +1,24 @@
 <template>
-  <!--  <div v-for="row in timetable">{{ row.lesson_name }}</div>-->
-  <p>Неделя номер: {{ weekNumber + 1 }}</p>
-  <div class="week">
-    <div class="day">
-      <div class="lesson">Пара Время</div>
-      <div class="lesson" v-for="lesson in 8">{{ lesson }} пара</div>
-    </div>
+  <v-container>
+    <v-row no-gutters>
+      <p>Неделя номер: {{ weekNumber + 1 }}</p>
+    </v-row>
+    <v-row no-gutters>
+      <v-col class="lesson">Пара Время</v-col>
+      <v-col class="lesson" v-for="lesson in 8" :key="lesson"
+        >{{ lesson }} пара</v-col
+      >
+    </v-row>
     <VTableRow
       v-for="day in 7"
       :key="day"
       :timetable="getTimeTableForDay(day)"
       :dayNumber="day"
     ></VTableRow>
-  </div>
+  </v-container>
 </template>
 
-<style>
-.week {
-  display: flex;
-  margin: 10px;
-  flex-direction: column;
-}
-</style>
+<style></style>
 
 <script>
 import VTableRow from "@/components/VTableRow.vue";
