@@ -8,6 +8,7 @@ router = routers.SimpleRouter()
 router.include_root_view = settings.DEBUG
 router.register(r'api/timetable', views.TimetableViewSet,
                 basename='timetable')
+router.register(r'api/group', views.GroupViewSet, basename='group')
 
 
 urlpatterns = [

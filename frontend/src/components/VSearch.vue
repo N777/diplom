@@ -1,34 +1,35 @@
 <template>
   <v-icon icon="mdi-vuetify" size="x-large"></v-icon>
   <v-autocomplete
-    v-model="select"
-    v-model:search="search"
-    :loading="loading"
-    :items="items"
-    class="mx-4"
-    density="comfortable"
-    hide-no-data
-    hide-details
-    label="What state are you from?"
-    style="max-width: 300px"
+    :items="groups"
+    label="Поиск"
+    @keydown.enter="search"
   ></v-autocomplete>
 </template>
 
 <script>
+import { mapActions, mapState, mapGetters } from "vuex";
+
 export default {
   name: "VSearch",
   data: () => ({
+    items: [],
+    select: null,
     loaded: false,
     loading: false,
   }),
-  methods: {
-    onClick() {
-      this.loading = true;
+  mounted() {
+    this.GET_GROUPS();
+  },
+  computed: {
+    ...mapGetters(["GROUPS"]),
+    ...mapState(["groups"]),
+  },
 
-      setTimeout(() => {
-        this.loading = false;
-        this.loaded = true;
-      }, 2000);
+  methods: {
+    ...mapActions(["GET_GROUPS"]),
+    search() {
+      this.$router.push("timetable");
     },
   },
 };

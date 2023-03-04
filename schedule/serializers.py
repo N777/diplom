@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from schedule.models import Timetable
+from schedule.models import Timetable, Group
 
 
 class TimetableSerializer(serializers.ModelSerializer):
@@ -13,4 +13,15 @@ class TimetableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Timetable
-        fields = ['lesson_name', 'lesson_type', 'subgroup', 'group_name', 'teacher_name', 'room_number', 'day', 'week', 'lesson_number']
+        fields = ['lesson_name', 'lesson_type', 'subgroup', 'group_name', 'teacher_name', 'room_number', 'day', 'week',
+                  'lesson_number']
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.name
+
+    class Meta:
+        model = Group
+        fields = ('name',)

@@ -16,7 +16,13 @@ export interface State {
 const routes = [
   {
     path: "/:type/:name",
+    name: "timetable",
     component: () => import("@/components/VTimeTable.vue"),
+    props: true,
+  },
+  {
+    path: "/",
+    component: () => import("@/components/VMainPage.vue"),
     props: true,
   },
 ];
@@ -31,18 +37,25 @@ const store = createStore({
   state: {
     count: 0,
     timetable: null,
+    groups: [],
   },
   mutations: {
     increment(state) {
       state.count++;
     },
-    SET_TODO: (state, payload) => {
+    SET_TIMETABLE: (state, payload) => {
       state.timetable = payload;
+    },
+    SET_GROUPS: (state, payload) => {
+      state.groups = payload;
     },
   },
   getters: {
     TIMETABLE(state) {
       return state.timetable;
+    },
+    GROUPS(state) {
+      return state.groups;
     },
   },
   actions: {
@@ -50,7 +63,12 @@ const store = createStore({
       return Axios.get(
         `http://127.0.0.1:8000/api/timetable/?search=${group}`
       ).then((res) => {
-        commit("SET_TODO", res.data);
+        commit("SET_TIMETABLE", res.data);
+      });
+    },
+    GET_GROUPS({ commit }) {
+      return Axios.get(`http://127.0.0.1:8000/api/group/`).then((res) => {
+        commit("SET_GROUPS", res.data);
       });
     },
   },
