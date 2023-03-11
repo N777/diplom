@@ -14,11 +14,10 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     VTable,
-    props: ["type", "name"],
   },
-
+  props: ["timetable"],
   mounted() {
-    this.GET_TIMETABLE(this.$route.params.name);
+    this.GET_TIMETABLE(this.timetable);
   },
   computed: {
     ...mapGetters(["TIMETABLE"]),

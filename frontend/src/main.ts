@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import Axios from "axios";
 import { createRouter, createWebHistory } from "vue-router";
-
+import "@mdi/font/css/materialdesignicons.css";
 import "./assets/main.css";
 
 import { createStore } from "vuex";
@@ -15,9 +15,9 @@ export interface State {
 
 const routes = [
   {
-    path: "/:type/:name",
+    path: "/:timetable",
     name: "timetable",
-    component: () => import("@/components/VTimeTable.vue"),
+    component: () => import("@/components/VMainPage.vue"),
     props: true,
   },
   {

@@ -1,9 +1,12 @@
 <template>
-  <v-icon icon="mdi-vuetify" size="x-large"></v-icon>
   <v-autocomplete
+    v-model="select"
+    v-model:search="search"
     :items="groups"
+    hide-no-data
+    hide-details
     label="Поиск"
-    @keydown.enter="search"
+    @keydown.enter="find"
   ></v-autocomplete>
 </template>
 
@@ -15,6 +18,7 @@ export default {
   data: () => ({
     items: [],
     select: null,
+    search: null,
     loaded: false,
     loading: false,
   }),
@@ -25,11 +29,21 @@ export default {
     ...mapGetters(["GROUPS"]),
     ...mapState(["groups"]),
   },
-
+  watch: {
+    search(val) {
+      if (this.GROUPS.includes(val)) {
+        this.select = val;
+        this.find();
+      }
+    },
+  },
   methods: {
     ...mapActions(["GET_GROUPS"]),
-    search() {
-      this.$router.push("timetable");
+    find() {
+      this.$router.push({
+        name: "timetable",
+        params: { timetable: this.select },
+      });
     },
   },
 };
