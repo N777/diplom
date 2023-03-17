@@ -1,9 +1,6 @@
 <template>
   <VSearch></VSearch>
-  <VTimeTable
-    v-if="this.$route.params?.timetable"
-    timetable="this.$route.params?.timetable"
-  ></VTimeTable>
+  <VTimeTable v-if="timetable" v-bind:timetable="timetable"></VTimeTable>
 </template>
 
 <script>
@@ -12,6 +9,7 @@ import VTimeTable from "./VTimeTable.vue";
 
 export default {
   components: { VSearch, VTimeTable },
+  props: ["timetable"],
   name: "VMainPage",
   computed: {},
 };
