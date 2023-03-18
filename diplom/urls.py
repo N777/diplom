@@ -21,4 +21,6 @@ import schedule
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('schedule.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),
 ]

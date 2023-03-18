@@ -19,6 +19,12 @@ export default {
   mounted() {
     this.GET_TIMETABLE(this.timetable);
   },
+  watch: {
+    // при изменениях маршрута запрашиваем данные снова
+    $route(to, from) {
+      this.GET_TIMETABLE(to.params.timetable);
+    },
+  },
   computed: {
     ...mapGetters(["TIMETABLE"]),
   },
