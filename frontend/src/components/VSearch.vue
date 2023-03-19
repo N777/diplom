@@ -6,7 +6,9 @@
     hide-no-data
     hide-details
     label="Поиск"
+    variant="underlined"
     @keydown.enter="find"
+    style="min-width: 80vw;"
   ></v-autocomplete>
 </template>
 
@@ -50,8 +52,5 @@ export default {
 </script>
 
 <style scoped>
-.v-text-field {
-  margin: 10px auto;
-  max-width: 90vw;
-}
+
 </style>

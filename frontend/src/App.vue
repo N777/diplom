@@ -6,7 +6,7 @@ import { mapMutations, mapState } from "vuex";
 import axios from "axios";
 
 export default {
-  beforeCreate() {
+  created() {
     this.$store.commit("initAuthStore");
     if (this.token) {
       axios.defaults.headers.common["Authorization"] = "Token " + this.token;

@@ -35,6 +35,7 @@ class Group(models.Model):
 
 
 class Teacher(models.Model):
+    # TODO сделать наследование от User
     name = models.CharField(max_length=255)
 
 

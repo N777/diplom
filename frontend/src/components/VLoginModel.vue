@@ -1,8 +1,12 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="dialog" persistent width="1024">
+  <v-row no-gutters  justify="center">
+    <v-dialog v-model="dialog" width="1024">
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Login </v-btn>
+        <div v-if="isAuth" class="d-flex justify-space-between align-center">
+          <v-chip>{{userInfo?.email}}</v-chip>
+          <v-btn v-on:click="deleteToken">Logout</v-btn>
+        </div>
+        <v-btn v-else color="primary" v-bind="props"> Login</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -42,20 +46,26 @@
 
 <script>
 import axios from "axios";
+import {mapActions, mapState} from "vuex";
 
 export default {
   data: () => ({ dialog: false, email: "", password: "" }),
   props: {
     openDialog: Boolean,
   },
+  computed:{
+    ...mapState(['isAuth', "userInfo"])
+  },
   methods: {
+    ...mapActions(['addToken', "deleteToken"]),
     submitLoginForm() {
       const formData = {
-        login: this.email,
+        email: this.email,
         password: this.password,
       };
       axios.post("auth/token/login", formData).then((response) => {
-        console.log(response.data);
+        this.addToken(response.data.auth_token)
+        this.dialog = false;
       });
     },
   },
