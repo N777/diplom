@@ -9,7 +9,7 @@ from schedule.serializers import TimetableSerializer, GroupSerializer
 
 
 class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                       viewsets.GenericViewSet):
+                       viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """Расписание."""
 
     queryset = Timetable.objects.all()
@@ -20,7 +20,7 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
 
 class GroupViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                       viewsets.GenericViewSet):
+                   viewsets.GenericViewSet):
 
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
