@@ -1,6 +1,6 @@
 <template>
   <v-row no-gutters justify="center">
-    <v-dialog v-model="dialog" persistent width="1024">
+    <v-dialog v-model="dialog" width="1024">
       <template v-slot:activator="{ props }">
         <v-btn
           size="small"
@@ -32,7 +32,7 @@
               label="Аудитория"
             ></v-text-field>
             <v-select
-              v-model="days[lesson.day]"
+              v-model="days[lesson.day - 1]"
               :items="days"
               :rules="[(v) => !!v || 'Item is required']"
               label="День"
