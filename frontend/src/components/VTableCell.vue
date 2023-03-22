@@ -25,18 +25,23 @@
         >{{ timetable.room_number }}</router-link
       >
     </p>
-    <v-row class="edit" no-gutters>
-      <v-btn size="small" v-if="isAuth" icon="mdi-pencil-outline" variant="plain"></v-btn>
-    </v-row>
 
+    <v-row v-if="isAuth" class="edit" no-gutters>
+      <v-btn size="small" icon="mdi-pencil-outline" variant="plain"></v-btn>
+      <VTimetableModal :timetable_id="timetable.id"></VTimetableModal>
+    </v-row>
   </v-col>
-  <v-col v-on:click="log" class="lesson d-flex align-center justify-center" v-else>
-      <v-btn size="x-small" v-if="isAuth" icon="mdi-plus" variant="plain"></v-btn>
+  <v-col
+    v-else
+    v-on:click="log"
+    class="lesson d-flex align-center justify-center"
+  >
+    <v-btn size="x-small" v-if="isAuth" icon="mdi-plus" variant="plain"></v-btn>
   </v-col>
 </template>
 
 <style>
-.edit{
+.edit {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -48,20 +53,23 @@
 </style>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from "vuex";
+import Axios from "axios";
+import VTimetableModal from "./VTimetableModal.vue";
 
 export default {
   name: "VTableCell",
+  components: { VTimetableModal },
   props: {
     timetable: Object,
   },
-  methods:{
+  methods: {
     log: function () {
-      console.log("Нет доступа")
-    }
+      console.log("Нет доступа");
+    },
   },
-  computed:{
-    ...mapState(['isAuth'])
+  computed: {
+    ...mapState(["isAuth"]),
   },
 };
 </script>

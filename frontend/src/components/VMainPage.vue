@@ -3,7 +3,7 @@
     <v-app-bar>
       <template v-slot:append>
         <VSearch></VSearch>
-        <VLoginModel></VLoginModel>
+        <VLoginModal></VLoginModal>
       </template>
     </v-app-bar>
     <v-main>
@@ -15,17 +15,17 @@
 <script>
 import VSearch from "./VSearch.vue";
 import VTimeTable from "./VTimeTable.vue";
-import VLoginModel from "./VLoginModel.vue";
+import VLoginModal from "./VLoginModal.vue";
 
 export default {
-  data: () => ({loginDialog: false}),
-  components: {VSearch, VTimeTable, VLoginModel},
+  data: () => ({ loginDialog: false }),
+  components: { VSearch, VTimeTable, VLoginModal },
   props: ["timetable"],
   name: "VMainPage",
   computed: {},
   created() {
     this.$store.dispatch("getUserInfo");
-  }
+  },
 };
 </script>
 

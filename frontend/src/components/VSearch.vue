@@ -8,7 +8,7 @@
     label="Поиск"
     variant="underlined"
     @keydown.enter="find"
-    style="min-width: 80vw;"
+    style="min-width: 80vw"
   ></v-autocomplete>
 </template>
 
@@ -51,6 +51,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
