@@ -1,28 +1,56 @@
 <template>
   <v-row no-gutters justify="center">
-    <v-dialog v-model="dialog" persistent width="auto">
+    <v-dialog v-model="dialog" persistent width="1024">
       <template v-slot:activator="{ props }">
         <v-btn
           size="small"
-          icon="mdi-alpha-x"
+          icon="mdi-pencil-outline"
           variant="plain"
           v-bind="props"
         ></v-btn>
       </template>
       <v-card>
-        <v-card-title class="text-h5"> Подтверждение </v-card-title>
-        <v-card-text>Вы уверены, что хотите удалить занятие?</v-card-text>
+        <v-card-title>
+          <span class="text-h5">User Profile</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-text-field
+              v-model="lesson.lesson_name"
+              label="Занятие"
+            ></v-text-field>
+            <v-text-field
+              v-model="lesson.group_name"
+              label="Группа"
+            ></v-text-field>
+            <v-text-field
+              v-model="lesson.teacher_name"
+              label="Преподаватель"
+            ></v-text-field>
+            <v-text-field
+              v-model="lesson.room_number"
+              label="Аудитория"
+            ></v-text-field>
+            <v-select
+              v-model="days[lesson.day]"
+              :items="days"
+              :rules="[(v) => !!v || 'Item is required']"
+              label="День"
+            ></v-select>
+            <v-text-field v-model="lesson.week" label="Неделя"></v-text-field>
+            <v-text-field
+              v-model="lesson.lesson_number"
+              label="Пара №"
+            ></v-text-field>
+          </v-container>
+        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green-darken-1" variant="text" @click="dialog = false">
-            Нет
+          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+            Закрыть
           </v-btn>
-          <v-btn
-            color="green-darken-1"
-            variant="text"
-            @click="deleteTimetable(timetable_id)"
-          >
-            Да
+          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+            Сохранить
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -31,30 +59,35 @@
 </template>
 
 <script>
-import Axios from "axios";
-
 export default {
   name: "VTimetableModal",
-  props: {
-    timetable_id: Number,
-  },
-  methods: {
-    deleteTimetable: function (id) {
-      Axios.get(`api/timetable/${id}/`).then((res) => {
-        this.$store.state.timetable = this.$store.state.timetable.filter(
-          function (f) {
-            return f.id !== id;
-          }
-        );
-        this.dialog = false;
-        console.log(res);
-      });
-    },
-  },
   data() {
     return {
       dialog: false,
+      days: [
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье",
+      ],
+      weeks: ["Чётная", "Нечётная"],
     };
+  },
+  computed: {
+    letter_day: function () {
+      return this.getDayName(this.lesson.day);
+    },
+  },
+  methods: {
+    getDayName(number) {
+      return this.days[number];
+    },
+  },
+  props: {
+    lesson: Object,
   },
 };
 </script>

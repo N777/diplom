@@ -27,8 +27,10 @@
     </p>
 
     <v-row v-if="isAuth" class="edit" no-gutters>
-      <v-btn size="small" icon="mdi-pencil-outline" variant="plain"></v-btn>
-      <VTimetableModal :timetable_id="timetable.id"></VTimetableModal>
+      <VTimetableModal :lesson="timetable"></VTimetableModal>
+      <VDeleteTimetableModal
+        :timetable_id="timetable.id"
+      ></VDeleteTimetableModal>
     </v-row>
   </v-col>
   <v-col
@@ -55,11 +57,12 @@
 <script>
 import { mapState } from "vuex";
 import Axios from "axios";
-import VTimetableModal from "./VTimetableModal.vue";
+import VDeleteTimetableModal from "./VDeleteTimetableModal.vue";
+import VTimetableModal from "@/components/VTimetableModal.vue";
 
 export default {
   name: "VTableCell",
-  components: { VTimetableModal },
+  components: { VDeleteTimetableModal, VTimetableModal },
   props: {
     timetable: Object,
   },
