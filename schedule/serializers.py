@@ -13,8 +13,8 @@ class TimetableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Timetable
-        fields = ['id','lesson_name', 'lesson_type', 'subgroup', 'group_name', 'teacher_name', 'room_number', 'day', 'week',
-                  'lesson_number']
+        fields = ['id', 'lesson_name', 'lesson_type', 'subgroup', 'group_name', 'teacher_name', 'room_number', 'day',
+                  'week', 'lesson_number']
 
 
 class GroupSerializer(serializers.ModelSerializer):

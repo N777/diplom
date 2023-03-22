@@ -53,3 +53,7 @@ class Timetable(models.Model):
     day = models.IntegerField(choices=DaysOfWeek.choices)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
     lesson_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(7)])
+
+
+class WeekDays(models.Model):
+    name = models.CharField(max_length=255)
