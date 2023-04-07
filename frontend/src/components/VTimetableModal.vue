@@ -16,23 +16,20 @@
         <v-card-text>
           <v-container>
             <v-text-field
-              v-model="lesson.lesson_name"
+              v-model="lesson.lesson"
               label="Занятие"
             ></v-text-field>
+            <v-text-field v-model="lesson.group" label="Группа"></v-text-field>
             <v-text-field
-              v-model="lesson.group_name"
-              label="Группа"
-            ></v-text-field>
-            <v-text-field
-              v-model="lesson.teacher_name"
+              v-model="lesson.teacher"
               label="Преподаватель"
             ></v-text-field>
             <v-text-field
-              v-model="lesson.room_number"
+              v-model="lesson.room"
               label="Аудитория"
             ></v-text-field>
             <v-select
-              v-model="days[lesson.day - 1]"
+              v-model="lesson.day"
               :items="days"
               :rules="[(v) => !!v || 'Item is required']"
               label="День"
