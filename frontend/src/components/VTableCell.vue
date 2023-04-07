@@ -2,27 +2,27 @@
   <v-col class="lesson" v-if="timetable">
     <p>
       <router-link
-        :to="{ name: 'timetable', params: { timetable: timetable.group_name } }"
-        >{{ timetable.group_name }}</router-link
+        :to="{ name: 'timetable', params: { timetable: timetable.group } }"
+        >{{ timetable.group }}</router-link
       >
     </p>
-    <p>{{ timetable.lesson_name }}</p>
+    <p>{{ timetable.lesson }}</p>
     <p>
       <router-link
         :to="{
           name: 'timetable',
-          params: { timetable: timetable.teacher_name },
+          params: { timetable: timetable.teacher },
         }"
-        >{{ timetable.teacher_name }}</router-link
+        >{{ timetable.teacher }}</router-link
       >
     </p>
     <p>
       <router-link
         :to="{
           name: 'timetable',
-          params: { timetable: timetable.room_number },
+          params: { timetable: timetable.room },
         }"
-        >{{ timetable.room_number }}</router-link
+        >{{ timetable.room }}</router-link
       >
     </p>
 
@@ -56,7 +56,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Axios from "axios";
 import VDeleteTimetableModal from "./VDeleteTimetableModal.vue";
 import VTimetableModal from "@/components/VTimetableModal.vue";
 

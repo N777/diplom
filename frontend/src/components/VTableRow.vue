@@ -1,6 +1,6 @@
 <template>
   <v-row no-gutters>
-    <v-col class="lesson">{{ getDayName(dayNumber - 1) }}</v-col>
+    <v-col class="lesson">{{ dayNumber }}</v-col>
     <VTableCell
       v-for="number in 8"
       :key="number"
@@ -24,18 +24,6 @@ export default {
         (lesson) => lesson.lesson_number === number
       );
       return lessons ? lessons[0] : null;
-    },
-    getDayName(number) {
-      const days = [
-        "Понедельник",
-        "Вторник",
-        "Среда",
-        "Четверг",
-        "Пятница",
-        "Суббота",
-        "Воскресенье",
-      ];
-      return days[number];
     },
   },
   props: {

@@ -1,20 +1,29 @@
+from enum import Enum
+
 from rest_framework import serializers
 
-from schedule.models import Timetable, Group
+from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room
 
 
 class TimetableSerializer(serializers.ModelSerializer):
     """Транзакции."""
 
-    lesson_name = serializers.CharField(source='lesson.name')
-    group_name = serializers.CharField(source='group.name')
-    teacher_name = serializers.CharField(source='teacher.name')
-    room_number = serializers.CharField(source='room.number')
+    lesson = serializers.SlugRelatedField(queryset=Lesson.objects.all(), slug_field='name')
+    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
+    teacher = serializers.SlugRelatedField(queryset=Teacher.objects.all(), slug_field='name')
+    room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
+    day = serializers.SlugRelatedField(queryset=WeekDays.objects.all(), slug_field='name')
+    week = serializers.ChoiceField(choices=[(x.value, x.name) for x in NumbersOfWeek])
 
     class Meta:
         model = Timetable
-        fields = ['id', 'lesson_name', 'lesson_type', 'subgroup', 'group_name', 'teacher_name', 'room_number', 'day',
-                  'week', 'lesson_number']
+        fields = '__all__'
+
+
+class WeekDaysSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeekDays
+        fields = '__all__'
 
 
 class GroupSerializer(serializers.ModelSerializer):

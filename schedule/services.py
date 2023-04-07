@@ -3,13 +3,13 @@ from dataclasses import dataclass
 
 import requests
 
-from schedule.models import Timetable, Lesson, Room, Teacher, Group
-
+from schedule.models import Timetable, Lesson, Room, Teacher, Group, WeekDays
 
 LESSON_TYPES = {
     'пр': 'practice',
     'Лаб': 'laboratory',
-    'лек': 'lecture'
+    'лек': 'lecture',
+    'экз': 'exam'
 }
 
 @dataclass
@@ -68,6 +68,7 @@ class TimetableParseService:
         room, created = Room.objects.get_or_create(number=timetable.lesson.room)
         teacher, created = Teacher.objects.get_or_create(name=timetable.lesson.teacher)
         group, created = Group.objects.get_or_create(name=timetable.lesson.group)
+        day = WeekDays.objects.get(id=timetable.day + 1)
         Timetable.objects.create(
             lesson=lesson,
             lesson_type=timetable.lesson.type_lesson,
@@ -75,7 +76,7 @@ class TimetableParseService:
             subgroup=timetable.lesson.subgroup,
             teacher=teacher,
             room=room,
-            day=timetable.day,
+            day=day,
             week=int(timetable.week) % 2,
             lesson_number=timetable.lesson_number
         )

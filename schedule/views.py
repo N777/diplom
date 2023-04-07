@@ -8,7 +8,7 @@ from schedule.models import Timetable, Group
 from schedule.serializers import TimetableSerializer, GroupSerializer
 
 
-class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                        viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """Расписание."""
 

@@ -22,6 +22,9 @@ class DaysOfWeek(models.IntegerChoices):
 class Lesson(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
@@ -33,14 +36,30 @@ class Group(models.Model):
             object = Group.objects.create(name=name)
         return object
 
+    def __str__(self):
+        return self.name
+
 
 class Teacher(models.Model):
     # TODO сделать наследование от User
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Room(models.Model):
     number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.number
+
+
+class WeekDays(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class Timetable(models.Model):
@@ -50,10 +69,6 @@ class Timetable(models.Model):
     subgroup = models.IntegerField(null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.DO_NOTHING)
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
-    day = models.IntegerField(choices=DaysOfWeek.choices)
+    day = models.ForeignKey(WeekDays, on_delete=models.DO_NOTHING)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
     lesson_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(7)])
-
-
-class WeekDays(models.Model):
-    name = models.CharField(max_length=255)

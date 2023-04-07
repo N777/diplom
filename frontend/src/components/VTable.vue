@@ -10,7 +10,7 @@
       >
     </v-row>
     <VTableRow
-      v-for="day in 7"
+      v-for="day in weekdays"
       :key="day"
       :timetable="getTimeTableForDay(day)"
       :dayNumber="day"
@@ -22,6 +22,8 @@
 
 <script>
 import VTableRow from "@/components/VTableRow.vue";
+import { mapState } from "vuex";
+import { days } from "@/constants";
 
 export default {
   name: "VTable",
@@ -31,6 +33,11 @@ export default {
   methods: {
     getTimeTableForDay(day) {
       return this.timetable.filter((lesson) => lesson.day === day);
+    },
+  },
+  computed: {
+    weekdays() {
+      return days;
     },
   },
   props: {

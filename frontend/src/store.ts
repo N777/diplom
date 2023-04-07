@@ -41,7 +41,7 @@ export const store = createStore({
     },
     setUserInfo: (state, payload) => {
       state.userInfo = payload;
-    }
+    },
   },
   getters: {
     TIMETABLE(state) {
@@ -52,15 +52,15 @@ export const store = createStore({
     },
   },
   actions: {
-    addToken({ commit }, token){
-      commit('setToken', token);
+    addToken({ commit }, token) {
+      commit("setToken", token);
       axios.defaults.headers.common["Authorization"] = "Token " + token;
       localStorage.setItem("token", token);
     },
-    deleteToken({ commit }){
-      commit('removeToken');
+    deleteToken({ commit }) {
+      commit("removeToken");
       localStorage.removeItem("token");
-      delete axios.defaults.headers.common['Authorization'];
+      delete axios.defaults.headers.common["Authorization"];
     },
     GET_TIMETABLE({ commit }, group) {
       return Axios.get(`api/timetable/?search=${group}`).then((res) => {
@@ -72,10 +72,10 @@ export const store = createStore({
         commit("SET_GROUPS", res.data);
       });
     },
-    getUserInfo({ commit }){
+    getUserInfo({ commit }) {
       return Axios.get(`auth/users/me/`).then((res) => {
         commit("setUserInfo", res.data);
       });
-    }
+    },
   },
 });
