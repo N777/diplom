@@ -11,6 +11,9 @@ export const store = createStore({
     count: 0,
     timetable: null,
     groups: [],
+    teachers: [],
+    rooms: [],
+    lessons: [],
   },
   mutations: {
     initAuthStore(state) {
@@ -38,6 +41,15 @@ export const store = createStore({
     },
     SET_GROUPS: (state, payload) => {
       state.groups = payload;
+    },
+    SET_ROOMS: (state, payload) => {
+      state.rooms = payload;
+    },
+    SET_TEACHERS: (state, payload) => {
+      state.teachers = payload;
+    },
+    SET_LESSONS: (state, payload) => {
+      state.lessons = payload;
     },
     setUserInfo: (state, payload) => {
       state.userInfo = payload;
@@ -70,6 +82,21 @@ export const store = createStore({
     GET_GROUPS({ commit }) {
       return Axios.get(`api/group/`).then((res) => {
         commit("SET_GROUPS", res.data);
+      });
+    },
+    GET_TEACHERS({ commit }) {
+      return Axios.get(`api/teacher/`).then((res) => {
+        commit("SET_TEACHERS", res.data);
+      });
+    },
+    GET_ROOMS({ commit }) {
+      return Axios.get(`api/room/`).then((res) => {
+        commit("SET_ROOMS", res.data);
+      });
+    },
+    GET_LESSONS({ commit }) {
+      return Axios.get(`api/lesson/`).then((res) => {
+        commit("SET_LESSONS", res.data);
       });
     },
     getUserInfo({ commit }) {

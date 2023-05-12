@@ -11,6 +11,7 @@ router.register(r'timetable', views.TimetableViewSet,
 router.register(r'group', views.GroupViewSet, basename='group')
 router.register(r'room', views.RoomViewSet, basename='room')
 router.register(r'teacher', views.TeacherViewSet, basename='teacher')
+router.register(r'lesson', views.LessonViewSet, basename='lesson')
 
 
 urlpatterns = [

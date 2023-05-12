@@ -26,6 +26,9 @@ export default {
   }),
   mounted() {
     this.GET_GROUPS();
+    this.GET_TEACHERS();
+    this.GET_ROOMS();
+    this.GET_LESSONS();
   },
   computed: {
     ...mapGetters(["GROUPS"]),
@@ -40,7 +43,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["GET_GROUPS"]),
+    ...mapActions(["GET_GROUPS", "GET_TEACHERS", "GET_ROOMS", "GET_LESSONS"]),
     find() {
       this.$router.push({
         name: "timetable",

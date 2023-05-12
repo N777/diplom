@@ -20,15 +20,20 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
 
 
 class GroupViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
 
 
 class TeacherViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Teacher.objects.all()
+    queryset = Teacher.objects.all().order_by('name')
     serializer_class = TeacherSerializer
 
 
 class RoomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Room.objects.all()
+    queryset = Room.objects.all().order_by('number')
     serializer_class = RoomSerializer
+
+
+class LessonViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Lesson.objects.all().order_by('name')
+    serializer_class = LessonSerializer

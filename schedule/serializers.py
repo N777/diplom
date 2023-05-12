@@ -54,3 +54,13 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ('number',)
+
+
+class LessonSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.name
+
+    class Meta:
+        model = Lesson
+        fields = ('name',)
