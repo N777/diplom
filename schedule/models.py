@@ -72,3 +72,6 @@ class Timetable(models.Model):
     day = models.ForeignKey(WeekDays, on_delete=models.DO_NOTHING)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
     lesson_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(7)])
+
+    def __str__(self):
+        return f"{self.lesson_type}-{self.lesson.name}-{self.group.name}-{self.teacher.name}-{self.lesson_number+1} пара"

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'schedule',
     'djoser',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

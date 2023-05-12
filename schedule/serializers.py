@@ -34,3 +34,23 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('name',)
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.name
+
+    class Meta:
+        model = Teacher
+        fields = ('name',)
+
+
+class RoomSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.number
+
+    class Meta:
+        model = Room
+        fields = ('number',)

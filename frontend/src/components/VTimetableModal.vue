@@ -78,16 +78,8 @@ export default {
       weeks: ["Чётная", "Нечётная"],
     };
   },
-  computed: {
-    letter_day: function () {
-      return this.getDayName(this.lesson.day);
-    },
-  },
-  methods: {
-    getDayName(number) {
-      return this.days[number];
-    },
-  },
+  computed: {},
+  methods: {},
   props: {
     lesson: Object,
   },

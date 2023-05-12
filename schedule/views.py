@@ -4,8 +4,8 @@ from rest_framework import mixins, viewsets
 from rest_framework.filters import SearchFilter
 
 from schedule.filters import TimetableFilter
-from schedule.models import Timetable, Group
-from schedule.serializers import TimetableSerializer, GroupSerializer
+from schedule.models import *
+from schedule.serializers import *
 
 
 class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
@@ -19,8 +19,16 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     search_fields = ['group__name', 'room__number', 'teacher__name']
 
 
-class GroupViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                   viewsets.GenericViewSet):
-
+class GroupViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class TeacherViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
+
+
+class RoomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer

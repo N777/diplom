@@ -6,9 +6,11 @@ from schedule import views
 
 router = routers.SimpleRouter()
 router.include_root_view = settings.DEBUG
-router.register(r'api/timetable', views.TimetableViewSet,
+router.register(r'timetable', views.TimetableViewSet,
                 basename='timetable')
-router.register(r'api/group', views.GroupViewSet, basename='group')
+router.register(r'group', views.GroupViewSet, basename='group')
+router.register(r'room', views.RoomViewSet, basename='room')
+router.register(r'teacher', views.TeacherViewSet, basename='teacher')
 
 
 urlpatterns = [
