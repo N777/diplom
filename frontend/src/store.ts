@@ -8,12 +8,14 @@ export const store = createStore({
     token: "",
     userInfo: null,
     isAuth: false,
+    cellWidth: 0,
     count: 0,
     timetable: null,
     groups: [],
     teachers: [],
     rooms: [],
     lessons: [],
+    lessonsTimes: [],
   },
   mutations: {
     initAuthStore(state) {
@@ -51,8 +53,14 @@ export const store = createStore({
     SET_LESSONS: (state, payload) => {
       state.lessons = payload;
     },
+    SET_LESSONS_TIMES: (state, payload) => {
+      state.lessonsTimes = payload;
+    },
     setUserInfo: (state, payload) => {
       state.userInfo = payload;
+    },
+    setCellWidth: (state, payload) => {
+      state.cellWidth = payload;
     },
   },
   getters: {
@@ -97,6 +105,11 @@ export const store = createStore({
     GET_LESSONS({ commit }) {
       return Axios.get(`api/lesson/`).then((res) => {
         commit("SET_LESSONS", res.data);
+      });
+    },
+    GET_LESSONS_TIMES({ commit }) {
+      return Axios.get(`api/lessons-times/`).then((res) => {
+        commit("SET_LESSONS_TIMES", res.data);
       });
     },
     getUserInfo({ commit }) {

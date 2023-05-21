@@ -1,33 +1,31 @@
 <template>
-  <v-row no-gutters justify="center">
-    <v-dialog v-model="dialog" persistent width="auto">
-      <template v-slot:activator="{ props }">
+  <v-dialog v-model="dialog" persistent width="auto">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        size="small"
+        icon="mdi-alpha-x"
+        variant="plain"
+        v-bind="props"
+      ></v-btn>
+    </template>
+    <v-card>
+      <v-card-title class="text-h5"> Подтверждение </v-card-title>
+      <v-card-text>Вы уверены, что хотите удалить занятие?</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green-darken-1" variant="text" @click="dialog = false">
+          Нет
+        </v-btn>
         <v-btn
-          size="small"
-          icon="mdi-alpha-x"
-          variant="plain"
-          v-bind="props"
-        ></v-btn>
-      </template>
-      <v-card>
-        <v-card-title class="text-h5"> Подтверждение </v-card-title>
-        <v-card-text>Вы уверены, что хотите удалить занятие?</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green-darken-1" variant="text" @click="dialog = false">
-            Нет
-          </v-btn>
-          <v-btn
-            color="green-darken-1"
-            variant="text"
-            @click="deleteTimetable(timetable_id)"
-          >
-            Да
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+          color="green-darken-1"
+          variant="text"
+          @click="deleteTimetable(timetable_id)"
+        >
+          Да
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

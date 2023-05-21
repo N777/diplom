@@ -4,10 +4,11 @@
       <p>Неделя номер: {{ weekNumber + 1 }}</p>
     </v-row>
     <v-row no-gutters>
-      <v-col class="lesson">Пара Время</v-col>
-      <v-col class="lesson" v-for="lesson in 8" :key="lesson"
-        >{{ lesson }} пара</v-col
-      >
+      <v-col ref="basecell" class="lesson">Пара Время</v-col>
+      <v-col class="lesson" v-for="lesson in lessonsTimes" :key="lesson"
+        >{{ lesson.id }} пара <br />
+        {{ lesson.start_time }}-{{ lesson.end_time }}
+      </v-col>
     </v-row>
     <VTableRow
       v-for="day in weekdays"
@@ -22,20 +23,25 @@
 
 <script>
 import VTableRow from "@/components/VTableRow.vue";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import { days } from "@/constants";
 
 export default {
   name: "VTable",
+  mounted() {
+    this.setCellWidth(this.$refs.basecell.$el.offsetWidth);
+  },
   components: {
     VTableRow,
   },
   methods: {
+    ...mapMutations(["setCellWidth"]),
     getTimeTableForDay(day) {
       return this.timetable.filter((lesson) => lesson.day === day);
     },
   },
   computed: {
+    ...mapState(["lessonsTimes"]),
     weekdays() {
       return days;
     },

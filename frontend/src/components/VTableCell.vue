@@ -1,37 +1,38 @@
 <template>
   <v-col class="lesson" v-if="timetable">
-    <p>
-      <router-link
-        :to="{ name: 'timetable', params: { timetable: timetable.group } }"
-        >{{ timetable.group }}</router-link
-      >
-    </p>
-    <p>{{ timetable.lesson }}</p>
-    <p>
-      <router-link
-        :to="{
-          name: 'timetable',
-          params: { timetable: timetable.teacher },
-        }"
-        >{{ timetable.teacher }}</router-link
-      >
-    </p>
-    <p>
-      <router-link
-        :to="{
-          name: 'timetable',
-          params: { timetable: timetable.room },
-        }"
-        >{{ timetable.room }}</router-link
-      >
-    </p>
-
-    <v-row v-if="isAuth" class="edit" no-gutters>
+    <div style="padding: 0.2rem">
+      <p>
+        <router-link
+          :to="{ name: 'timetable', params: { timetable: timetable.group } }"
+          >{{ timetable.group }}
+        </router-link>
+      </p>
+      <p>{{ timetable.lesson }}</p>
+      <p>
+        <router-link
+          :to="{
+            name: 'timetable',
+            params: { timetable: timetable.teacher },
+          }"
+          >{{ timetable.teacher }}
+        </router-link>
+      </p>
+      <p>
+        <router-link
+          :to="{
+            name: 'timetable',
+            params: { timetable: timetable.room },
+          }"
+          >{{ timetable.room }}
+        </router-link>
+      </p>
+    </div>
+    <div v-if="isAuth" class="edit">
       <VTimetableModal :lesson="timetable"></VTimetableModal>
       <VDeleteTimetableModal
         :timetable_id="timetable.id"
       ></VDeleteTimetableModal>
-    </v-row>
+    </div>
   </v-col>
   <v-col
     v-else
@@ -44,12 +45,15 @@
 
 <style>
 .edit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  display: flex;
+  justify-content: flex-end;
 }
+
 .lesson {
   border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: relative;
 }
 </style>

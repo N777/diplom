@@ -37,3 +37,8 @@ class RoomViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class LessonViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Lesson.objects.all().order_by('name')
     serializer_class = LessonSerializer
+
+
+class LessonsTimesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = LessonsTimes.objects.all().order_by('id')
+    serializer_class = LessonsTimesSerializer

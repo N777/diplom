@@ -1,8 +1,9 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-
 # Create your models here.
+from rest_framework.exceptions import ValidationError
+
 
 class NumbersOfWeek(models.IntegerChoices):
     EVEN = 0, 'Чётная'
@@ -62,6 +63,11 @@ class WeekDays(models.Model):
         return self.name
 
 
+class LessonsTimes(models.Model):
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+
 class Timetable(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.DO_NOTHING)
     lesson_type = models.CharField(max_length=255)
@@ -71,7 +77,15 @@ class Timetable(models.Model):
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
     day = models.ForeignKey(WeekDays, on_delete=models.DO_NOTHING)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
-    lesson_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(7)])
+    lesson_number = models.ForeignKey(LessonsTimes, null=True, validators=[MinValueValidator(1), MaxValueValidator(8)],
+                                      on_delete=models.DO_NOTHING)
+    start_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True)
+
+    def clean(self):
+        if not self.lesson_number and not (self.start_time or self.end_time):
+            raise ValidationError("Должно быть заполнено или пара или время начало и конца занятия")
 
     def __str__(self):
-        return f"{self.lesson_type}-{self.lesson.name}-{self.group.name}-{self.teacher.name}-{self.lesson_number+1} пара"
+        return f"{self.lesson_type}-{self.lesson.name}-{self.group.name}-{self.teacher.name}" \
+               f"-{self.lesson_number.id} пара"

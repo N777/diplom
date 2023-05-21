@@ -2,7 +2,7 @@ from enum import Enum
 
 from rest_framework import serializers
 
-from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room
+from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room, LessonsTimes
 
 
 class TimetableSerializer(serializers.ModelSerializer):
@@ -64,3 +64,13 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ('name',)
+
+
+class LessonsTimesSerializer(serializers.ModelSerializer):
+
+    start_time = serializers.TimeField(format="%H:%M", read_only=True)
+    end_time = serializers.TimeField(format="%H:%M", read_only=True)
+
+    class Meta:
+        model = LessonsTimes
+        fields = '__all__'
