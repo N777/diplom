@@ -8,6 +8,10 @@ router = routers.SimpleRouter()
 router.include_root_view = settings.DEBUG
 router.register(r'timetable', views.TimetableViewSet,
                 basename='timetable')
+router.register(r'event-timetable', views.EventTimetableViewSet,
+                basename='event-timetable')
+router.register(r'lesson-timetable', views.LessonTimetableViewSet,
+                basename='lesson-timetable')
 router.register(r'group', views.GroupViewSet, basename='group')
 router.register(r'room', views.RoomViewSet, basename='room')
 router.register(r'teacher', views.TeacherViewSet, basename='teacher')

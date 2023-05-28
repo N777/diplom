@@ -8,6 +8,8 @@ from schedule.models import *
 from schedule.serializers import *
 
 
+# TODO что делать с 2-СЗ
+
 class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                        viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """Расписание."""
@@ -17,6 +19,16 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = TimetableFilter
     search_fields = ['group__name', 'room__number', 'teacher__name']
+
+
+class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    queryset = Timetable.objects.all()
+    serializer_class = EventTimetableSerializer
+
+
+class LessonTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    queryset = Timetable.objects.all()
+    serializer_class = LessonTimetableSerializer
 
 
 class GroupViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

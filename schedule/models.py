@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -67,13 +69,25 @@ class LessonsTimes(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
 
+    @staticmethod
+    def get_lesson_number(need_time: datetime.datetime):
+        lessons_times = list(LessonsTimes.objects.all())
+        for i in range(len(lessons_times)):
+            times = lessons_times[i].start_time
+            try:
+                next_times = lessons_times[i+1].start_time
+            except IndexError:
+                next_times = lessons_times[i].end_time
+            if times <= need_time.time() < next_times:
+                return lessons_times[i].id
+
 
 class Timetable(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.DO_NOTHING)
     lesson_type = models.CharField(max_length=255)
-    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING)
+    group = models.ForeignKey(Group, on_delete=models.DO_NOTHING, null=True)
     subgroup = models.IntegerField(null=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.DO_NOTHING)
+    teacher = models.ForeignKey(Teacher, on_delete=models.DO_NOTHING, null=True)
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
     day = models.ForeignKey(WeekDays, on_delete=models.DO_NOTHING)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
@@ -81,6 +95,7 @@ class Timetable(models.Model):
                                       on_delete=models.DO_NOTHING)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
+    once = models.BooleanField(default=False)
 
     def clean(self):
         if not self.lesson_number and not (self.start_time or self.end_time):

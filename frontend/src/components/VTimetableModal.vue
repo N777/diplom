@@ -15,17 +15,37 @@
         </v-card-title>
         <v-card-text>
           <v-container>
+            <v-col>
+              <v-btn-toggle
+                v-model="type"
+                rounded="1"
+                color="blue"
+                group
+                variant="plain"
+              >
+                <v-btn :value="types.Lesson">Занятие</v-btn>
+                <v-btn :value="types.Event">Мероприятие</v-btn>
+              </v-btn-toggle>
+            </v-col>
+            <v-text-field
+              v-if="type === types.Event"
+              v-model="modalData.lesson"
+              label="Название мероприятия"
+            ></v-text-field>
             <v-autocomplete
+              v-if="type === types.Lesson"
               v-model="modalData.lesson"
               :items="lessons"
-              label="Занятие"
+              label="Название занятия"
             ></v-autocomplete>
             <v-autocomplete
+              v-if="type === types.Lesson"
               v-model="modalData.group"
               :items="groups"
               label="Группа"
             ></v-autocomplete>
             <v-autocomplete
+              v-if="type === types.Lesson"
               v-model="modalData.teacher"
               :items="teachers"
               label="Преподаватель"
@@ -36,16 +56,31 @@
               label="Аудитория"
             ></v-autocomplete>
             <v-autocomplete
+              v-if="type === types.Lesson"
               v-model="modalData.day"
               :items="days"
               label="День"
             ></v-autocomplete>
             <v-select
+              v-if="type === types.Lesson"
               v-model="weeks[modalData.week]"
               :items="weeks"
               label="Неделя"
             ></v-select>
             <v-text-field
+              type="datetime-local"
+              v-if="type === types.Event"
+              label="Начало"
+            >
+            </v-text-field>
+            <v-text-field
+              type="datetime-local"
+              v-if="type === types.Event"
+              label="Конец"
+            >
+            </v-text-field>
+            <v-text-field
+              v-if="type === types.Lesson"
               v-model="modalData.lesson_number"
               label="Пара №"
               :rules="[(v) => (0 < v && v < 8) || 'Введена некорректная пара']"
@@ -77,11 +112,14 @@
 <script>
 import { mapState } from "vuex";
 import { reactive } from "vue";
+import { TimetableType } from "../enums";
 
 export default {
   name: "VTimetableModal",
   data() {
     return {
+      types: TimetableType,
+      type: TimetableType.Lesson,
       modalData: reactive({ ...this.lesson }),
       dialog: false,
       form: true,

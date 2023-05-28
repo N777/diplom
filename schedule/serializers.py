@@ -1,6 +1,9 @@
+from datetime import datetime
 from enum import Enum
 
+from django.db import transaction
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 
 from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room, LessonsTimes
 
@@ -18,6 +21,59 @@ class TimetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Timetable
         fields = '__all__'
+
+
+class EventTimetableSerializer(serializers.ModelSerializer):
+    """Расписание мероприятия"""
+
+    lesson = serializers.CharField()
+    room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
+    start_time = serializers.DateTimeField(required=True)
+    end_time = serializers.DateTimeField(required=True)
+
+    class Meta:
+        model = Timetable
+        fields = ('id', 'lesson', 'room', 'start_time', 'end_time')
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        lesson, _ = Lesson.objects.get_or_create(name=validated_data.get('lesson'))
+        day = validated_data.get('start_time').weekday() + 1
+        week = int(validated_data.get('start_time').strftime('%U')) - int(
+            validated_data.get('start_time').replace(day=1).strftime('%U'))
+        start_lesson_number = LessonsTimes.get_lesson_number(validated_data.get('start_time'))
+        end_lesson_number = LessonsTimes.get_lesson_number(validated_data.get('end_time'))
+        timetable = None
+        for lesson_number in range(start_lesson_number, end_lesson_number + 1):
+            timetable = Timetable(
+                lesson=lesson,
+                lesson_type='event',
+                room=validated_data.get('room'),
+                day=WeekDays.objects.get(id=day),
+                week=week % 2,
+                lesson_number=LessonsTimes.objects.get(id=lesson_number),
+                start_time=validated_data.get('start_time'),
+                end_time=validated_data.get('end_time'),
+            )
+            timetable.save()
+        if not timetable:
+            raise ParseError
+        return timetable
+
+
+class LessonTimetableSerializer(serializers.ModelSerializer):
+    """Расписание занятия"""
+
+    lesson = serializers.SlugRelatedField(queryset=Lesson.objects.all(), slug_field='name')
+    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
+    teacher = serializers.SlugRelatedField(queryset=Teacher.objects.all(), slug_field='name')
+    room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
+    day = serializers.SlugRelatedField(queryset=WeekDays.objects.all(), slug_field='name')
+    week = serializers.ChoiceField(choices=[(x.value, x.name) for x in NumbersOfWeek])
+
+    class Meta:
+        model = Timetable
+        fields = ('id', 'lesson', 'group', 'teacher', 'room', 'day', 'week', 'lesson_number')
 
 
 class WeekDaysSerializer(serializers.ModelSerializer):
@@ -67,7 +123,6 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class LessonsTimesSerializer(serializers.ModelSerializer):
-
     start_time = serializers.TimeField(format="%H:%M", read_only=True)
     end_time = serializers.TimeField(format="%H:%M", read_only=True)
 
