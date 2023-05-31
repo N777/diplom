@@ -95,7 +95,7 @@ class Timetable(models.Model):
                                       on_delete=models.DO_NOTHING)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
-    once = models.BooleanField(default=False)
+    once = models.BooleanField(default=False, null=False)
 
     def clean(self):
         if not self.lesson_number and not (self.start_time or self.end_time):

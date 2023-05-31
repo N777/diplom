@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
 from rest_framework import mixins, viewsets
@@ -14,11 +17,19 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
                        viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """Расписание."""
 
-    queryset = Timetable.objects.all()
     serializer_class = TimetableSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_class = TimetableFilter
     search_fields = ['group__name', 'room__number', 'teacher__name']
+
+    def get_queryset(self):
+        today = datetime.today()
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_second_week = start_of_week + timedelta(days=14)
+        regular_filter = Q(once=False)
+        current_events_filter = Q(start_time__gte=start_of_week) & Q(end_time__lte=end_of_second_week) & Q(once=True)
+        union_qs = Timetable.objects.filter(regular_filter | current_events_filter)
+        return union_qs
 
 
 class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
