@@ -16,6 +16,7 @@ class TimetableSerializer(serializers.ModelSerializer):
     teacher = serializers.SlugRelatedField(queryset=Teacher.objects.all(), slug_field='name')
     room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
     day = serializers.SlugRelatedField(queryset=WeekDays.objects.all(), slug_field='name')
+    lesson_number = serializers.SlugRelatedField(queryset=LessonsTimes.objects.all(), slug_field='id')
     week = serializers.ChoiceField(choices=[(x.value, x.name) for x in NumbersOfWeek])
 
     class Meta:
@@ -69,6 +70,7 @@ class LessonTimetableSerializer(serializers.ModelSerializer):
     teacher = serializers.SlugRelatedField(queryset=Teacher.objects.all(), slug_field='name')
     room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
     day = serializers.SlugRelatedField(queryset=WeekDays.objects.all(), slug_field='name')
+    lesson_number = serializers.SlugRelatedField(queryset=LessonsTimes.objects.all(), slug_field='id')
     week = serializers.ChoiceField(choices=[(x.value, x.name) for x in NumbersOfWeek])
 
     class Meta:

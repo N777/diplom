@@ -13,6 +13,7 @@
     <VTableRow
       v-for="day in weekdays"
       :key="day"
+      :week="weekNumber"
       :timetable="getTimeTableForDay(day)"
       :dayNumber="day"
     ></VTableRow>
@@ -22,7 +23,7 @@
 <style></style>
 
 <script>
-import VTableRow from "@/components/VTableRow.vue";
+import VTableRow from "./VTableRow.vue";
 import { mapMutations, mapState } from "vuex";
 import { days } from "@/constants";
 

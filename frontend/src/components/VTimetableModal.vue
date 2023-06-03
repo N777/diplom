@@ -1,106 +1,105 @@
 <template>
-  <v-form fast-fail v-model="form">
+  <v-form ref="form" fast-fail>
     <v-dialog v-model="dialog" width="1024">
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-btn
           size="small"
-          icon="mdi-pencil-outline"
           variant="plain"
           v-bind="props"
-        ></v-btn>
+          :icon="editMode ? 'mdi-pencil-outline' : 'mdi-plus'"
+        />
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Редактирование</span>
+          <span v-if="editMode" class="text-h5">Редактирование</span>
+          <span v-else class="text-h5">Создание</span>
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-col>
+            <v-col v-if="!editMode">
               <v-btn-toggle
-                v-model="type"
+                v-model="modalData.lesson_type"
                 rounded="1"
                 color="blue"
                 group
                 variant="plain"
               >
-                <v-btn :value="types.Lesson">Занятие</v-btn>
-                <v-btn :value="types.Event">Мероприятие</v-btn>
+                <v-btn :value="types.Lesson"> Занятие </v-btn>
+                <v-btn :value="types.Event"> Мероприятие </v-btn>
               </v-btn-toggle>
             </v-col>
             <v-text-field
-              v-if="type === types.Event"
+              v-if="isTypeEvent"
               v-model="modalData.lesson"
               label="Название мероприятия"
-            ></v-text-field>
+            />
             <v-autocomplete
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="modalData.lesson"
               :items="lessons"
               label="Название занятия"
-            ></v-autocomplete>
+            />
             <v-autocomplete
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="modalData.group"
               :items="groups"
               label="Группа"
-            ></v-autocomplete>
+            />
             <v-autocomplete
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="modalData.teacher"
               :items="teachers"
               label="Преподаватель"
-            ></v-autocomplete>
+            />
             <v-autocomplete
               v-model="modalData.room"
               :items="rooms"
+              :rules="[(v) => !!v || 'Аудитория']"
+              required
               label="Аудитория"
-            ></v-autocomplete>
+            />
             <v-autocomplete
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="modalData.day"
               :items="days"
               label="День"
-            ></v-autocomplete>
+            />
             <v-select
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="weeks[modalData.week]"
               :items="weeks"
               label="Неделя"
-            ></v-select>
+            />
             <v-text-field
+              v-if="isTypeEvent"
+              v-model="modalData.start_time"
               type="datetime-local"
-              v-if="type === types.Event"
               label="Начало"
-            >
-            </v-text-field>
+            />
             <v-text-field
+              v-if="isTypeEvent"
+              v-model="modalData.end_time"
               type="datetime-local"
-              v-if="type === types.Event"
               label="Конец"
-            >
-            </v-text-field>
+            />
             <v-text-field
-              v-if="type === types.Lesson"
+              v-if="!isTypeEvent"
               v-model="modalData.lesson_number"
               label="Пара №"
               :rules="[(v) => (0 < v && v < 8) || 'Введена некорректная пара']"
-              v-on:change="
-                modalData.lesson_number = parseFloat(modalData.lesson_number)
+              @change="
+                modalData.lesson_number =
+                  parseFloat(modalData.lesson_number) || ''
               "
-            ></v-text-field>
+            />
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
             Закрыть
           </v-btn>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="save"
-            :disabled="!form"
-          >
+          <v-btn color="blue-darken-1" variant="text" @click="validate">
             Сохранить
           </v-btn>
         </v-card-actions>
@@ -110,9 +109,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { reactive } from "vue";
 import { TimetableType } from "../enums";
+import TimetableApi from "../requests";
 
 export default {
   name: "VTimetableModal",
@@ -122,7 +122,6 @@ export default {
       type: TimetableType.Lesson,
       modalData: reactive({ ...this.lesson }),
       dialog: false,
-      form: true,
       days: [
         "Понедельник",
         "Вторник",
@@ -137,16 +136,38 @@ export default {
   },
   computed: {
     ...mapState(["groups", "teachers", "rooms", "lessons", "timetable"]),
+    isTypeEvent() {
+      return this.modalData.lesson_type === this.types.Event;
+    },
   },
   methods: {
-    save() {
-      const i = this.timetable.indexOf(this.lesson);
-      this.timetable[i] = this.modalData;
+    ...mapActions(["GET_TIMETABLE"]),
+    async validate() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) await this.save();
+    },
+    async save() {
+      if (this.editMode) {
+        await TimetableApi.editTimetable(this.modalData.id, this.modalData);
+        const i = this.timetable.indexOf(this.lesson);
+        this.timetable[i] = this.modalData;
+      } else {
+        let response;
+        if (this.isTypeEvent) {
+          response = await TimetableApi.createTimetableEvent(this.modalData);
+        } else {
+          response = await TimetableApi.createTimetableLesson(this.modalData);
+        }
+        debugger;
+        await this.GET_TIMETABLE(this.$route.params.timetable);
+      }
+
       this.dialog = false;
     },
   },
   props: {
     lesson: Object,
+    editMode: Boolean,
   },
 };
 </script>

@@ -4,17 +4,20 @@
     <VTableCell
       v-for="number in 8"
       :key="number"
+      :lesson_number="number"
+      :day="dayNumber"
+      :week="week"
       :timetable="getTimeTableForLesson(number)"
     >
     </VTableCell>
-    <VTableCellAbsolute>ТЕСТ</VTableCellAbsolute>
+    <!--    <VTableCellAbsolute>ТЕСТ</VTableCellAbsolute>-->
   </v-row>
 </template>
 
 <style></style>
 
 <script>
-import VTableCell from "@/components/VTableCell.vue";
+import VTableCell from "./VTableCell.vue";
 import { mapState } from "vuex";
 import VTableCellAbsolute from "./VTableCellAbsolute.vue";
 
@@ -33,6 +36,7 @@ export default {
     ...mapState(["cellWidth"]),
   },
   props: {
+    week: Number,
     timetable: Array,
     dayNumber: String,
   },
