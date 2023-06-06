@@ -1,11 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from schedule.models import Timetable
 from schedule.services import TimetableParseService
 
 
 class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
 
     def handle(self, *args, **options):
         service = TimetableParseService()

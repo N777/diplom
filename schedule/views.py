@@ -13,8 +13,8 @@ from schedule.serializers import *
 
 # TODO что делать с 2-СЗ
 
-class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
-                       viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet,
+                       mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """Расписание."""
 
     serializer_class = TimetableSerializer
@@ -30,6 +30,15 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         current_events_filter = Q(start_time__gte=start_of_week) & Q(end_time__lte=end_of_second_week) & Q(once=True)
         union_qs = Timetable.objects.filter(regular_filter | current_events_filter)
         return union_qs
+
+
+class TimetablePrintViewSet(viewsets.GenericViewSet):
+    queryset = Timetable.objects.filter(once=False)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+
 
 
 class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):

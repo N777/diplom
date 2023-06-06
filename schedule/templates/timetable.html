@@ -1,0 +1,28 @@
+<table>
+    <caption>{{ week }} неделя</caption>
+    <tr>
+        <th></th>
+        {% for lesson in lesson_iterator %}
+            <th>{{ lesson }} пара</th>
+        {% endfor %}
+    </tr>
+    {% for day in day_iterator %}
+        <tr>
+            <th>{{ week_days|get_item:day }}</th>
+            {% for lesson in lesson_iterator %}
+                <th>
+                    {% if table|get_item:day|get_item:lesson %}
+                        {% for lesson in table|get_item:day|get_item:lesson %}
+                            <div style="border: 0.5px solid">
+                                <p>{{ lesson.lesson_type }} {{ lesson.lesson__name }}</p>
+                                <p>{{ lesson.group__name }}</p>
+                                <p>{{ lesson.room__number }}</p>
+                                <p>{{ lesson.teacher__name }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </th>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>

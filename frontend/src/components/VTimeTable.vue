@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import VTable from "@/components/VTable.vue";
+import VTable from "./VTable.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {

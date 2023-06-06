@@ -4,13 +4,13 @@
       <template v-slot:activator="{ props }">
         <div v-if="isAuth" class="d-flex justify-space-between align-center">
           <v-chip>{{ userInfo?.email }}</v-chip>
-          <v-btn v-on:click="deleteToken">Logout</v-btn>
+          <v-btn v-on:click="deleteToken">Выйти</v-btn>
         </div>
-        <v-btn v-else color="primary" v-bind="props"> Login</v-btn>
+        <v-btn v-else color="primary" v-bind="props"> Войти</v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">User Profile</span>
+          <span class="text-h5">Авторизация</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -24,7 +24,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Password*"
+                  label="Пароль*"
                   type="password"
                   v-model="password"
                   required
@@ -36,7 +36,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue-darken-1" variant="text" @click="submitLoginForm">
-            LogIn
+            Войти
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,13 +69,6 @@ export default {
       });
     },
   },
-  // computed: {
-  //   // геттер вычисляемого значения
-  //   dialog: function () {
-  //     // `this` указывает на экземпляр vm
-  //     return this.openDialog;
-  //   },
-  // },
   name: "VLoginModel",
 };
 </script>

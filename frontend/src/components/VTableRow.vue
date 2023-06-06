@@ -1,11 +1,11 @@
 <template>
   <v-row no-gutters>
-    <v-col class="lesson">{{ dayNumber }}</v-col>
+    <v-col class="lesson">{{ dayName }}</v-col>
     <VTableCell
       v-for="number in 8"
       :key="number"
       :lesson_number="number"
-      :day="dayNumber"
+      :day="dayName"
       :week="week"
       :timetable="getTimeTableForLesson(number)"
     >
@@ -13,8 +13,6 @@
     <!--    <VTableCellAbsolute>ТЕСТ</VTableCellAbsolute>-->
   </v-row>
 </template>
-
-<style></style>
 
 <script>
 import VTableCell from "./VTableCell.vue";
@@ -38,7 +36,7 @@ export default {
   props: {
     week: Number,
     timetable: Array,
-    dayNumber: String,
+    dayName: String,
   },
 };
 </script>

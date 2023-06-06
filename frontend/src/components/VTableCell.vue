@@ -40,6 +40,7 @@
     class="lesson d-flex align-center justify-center"
   >
     <VTimetableModal
+      v-if="isAuth"
       :lesson="newTimetable"
       :edit-mode="false"
     ></VTimetableModal>

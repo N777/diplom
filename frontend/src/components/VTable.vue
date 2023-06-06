@@ -15,7 +15,7 @@
       :key="day"
       :week="weekNumber"
       :timetable="getTimeTableForDay(day)"
-      :dayNumber="day"
+      :dayName="day"
     ></VTableRow>
   </v-container>
 </template>

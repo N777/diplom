@@ -12,16 +12,6 @@ class NumbersOfWeek(models.IntegerChoices):
     ODD = 1, 'Нечётная'
 
 
-class DaysOfWeek(models.IntegerChoices):
-    Monday = 0, 'Понедельник'
-    Tuesday = 1, 'Вторник'
-    Wednesday = 2, 'Среда'
-    Thursday = 3, 'Четверг'
-    Friday = 4, 'Пятница'
-    Saturday = 5, 'Суббота'
-    Sunday = 6, 'Воскресенье'
-
-
 class Lesson(models.Model):
     name = models.CharField(max_length=255)
 
@@ -31,13 +21,6 @@ class Lesson(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=255)
-
-    def get_or_create(self, name: str):
-        try:
-            object = Group.objects.get(name=name)
-        except Group.DoesNotExist:
-            object = Group.objects.create(name=name)
-        return object
 
     def __str__(self):
         return self.name
@@ -75,7 +58,7 @@ class LessonsTimes(models.Model):
         for i in range(len(lessons_times)):
             times = lessons_times[i].start_time
             try:
-                next_times = lessons_times[i+1].start_time
+                next_times = lessons_times[i + 1].start_time
             except IndexError:
                 next_times = lessons_times[i].end_time
             if times <= need_time.time() < next_times:

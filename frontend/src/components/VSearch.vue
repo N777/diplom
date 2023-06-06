@@ -2,7 +2,7 @@
   <v-autocomplete
     v-model="select"
     v-model:search="search"
-    :items="groups"
+    :items="search_items"
     hide-no-data
     hide-details
     label="Поиск"
@@ -21,8 +21,6 @@ export default {
     items: [],
     select: null,
     search: null,
-    loaded: false,
-    loading: false,
   }),
   mounted() {
     this.GET_GROUPS();
@@ -32,19 +30,27 @@ export default {
     this.GET_LESSONS_TIMES();
   },
   computed: {
-    ...mapGetters(["GROUPS"]),
-    ...mapState(["groups"]),
+    ...mapState(["groups", "teachers", "rooms"]),
+    search_items() {
+      return [...this.groups, ...this.rooms, ...this.teachers];
+    },
   },
   watch: {
     search(val) {
-      if (this.GROUPS.includes(val)) {
+      if (this.search_items.includes(val)) {
         this.select = val;
         this.find();
       }
     },
   },
   methods: {
-    ...mapActions(["GET_GROUPS", "GET_TEACHERS", "GET_ROOMS", "GET_LESSONS", "GET_LESSONS_TIMES"]),
+    ...mapActions([
+      "GET_GROUPS",
+      "GET_TEACHERS",
+      "GET_ROOMS",
+      "GET_LESSONS",
+      "GET_LESSONS_TIMES",
+    ]),
     find() {
       this.$router.push({
         name: "timetable",
