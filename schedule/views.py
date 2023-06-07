@@ -61,12 +61,12 @@ class TimetablePrintView(APIView):
         return response
 
 
-class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = Timetable.objects.all()
     serializer_class = EventTimetableSerializer
 
 
-class LessonTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class LessonTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     queryset = Timetable.objects.all()
     serializer_class = LessonTimetableSerializer
 

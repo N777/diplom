@@ -72,26 +72,30 @@
             />
             <v-text-field
               v-if="isTypeEvent"
+              v-model="modalData.date"
+              type="date"
+              label="Начало"
+            />
+            <v-text-field
+              v-if="isTypeEvent"
               v-model="modalData.start_time"
-              type="datetime-local"
+              type="time"
               label="Начало"
             />
             <v-text-field
               v-if="isTypeEvent"
               v-model="modalData.end_time"
-              type="datetime-local"
+              type="time"
               label="Конец"
             />
             <v-text-field
               v-if="!isTypeEvent"
-              v-model="modalData.lesson_number"
+              v-model.number="modalData.lesson_number"
+              type="number"
               label="Пара №"
-              :rules="[(v) => (0 < v && v < 8) || 'Введена некорректная пара']"
-              @change="
-                modalData.lesson_number =
-                  parseFloat(modalData.lesson_number) || ''
-              "
+              :rules="[(v) => (0 < v && v < 9) || 'Введена некорректная пара']"
             />
+            <v-switch v-model="modalData.once" label="Один раз"></v-switch>
           </v-container>
         </v-card-text>
         <v-card-actions>

@@ -53,7 +53,7 @@ class LessonsTimes(models.Model):
     end_time = models.TimeField()
 
     @staticmethod
-    def get_lesson_number(need_time: datetime.datetime):
+    def get_lesson_number(need_time: datetime.time):
         lessons_times = list(LessonsTimes.objects.all())
         for i in range(len(lessons_times)):
             times = lessons_times[i].start_time
@@ -61,7 +61,7 @@ class LessonsTimes(models.Model):
                 next_times = lessons_times[i + 1].start_time
             except IndexError:
                 next_times = lessons_times[i].end_time
-            if times <= need_time.time() < next_times:
+            if times <= need_time < next_times:
                 return lessons_times[i].id
 
 

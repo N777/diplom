@@ -3,7 +3,7 @@ from enum import Enum
 
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import ParseError, ValidationError
 
 from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room, LessonsTimes
 
@@ -29,19 +29,20 @@ class EventTimetableSerializer(serializers.ModelSerializer):
 
     lesson = serializers.CharField()
     room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
-    start_time = serializers.DateTimeField(required=True)
-    end_time = serializers.DateTimeField(required=True)
+    date = serializers.DateField(required=True, write_only=True)
+    start_time = serializers.TimeField(required=True, write_only=True)
+    end_time = serializers.TimeField(required=True, write_only=True)
 
     class Meta:
         model = Timetable
-        fields = ('id', 'lesson', 'room', 'start_time', 'end_time')
+        fields = ('id', 'lesson', 'room', 'start_time', 'end_time', 'date', 'once')
 
     @transaction.atomic()
     def create(self, validated_data):
         lesson, _ = Lesson.objects.get_or_create(name=validated_data.get('lesson'))
-        day = validated_data.get('start_time').weekday() + 1
-        week = int(validated_data.get('start_time').strftime('%U')) - int(
-            validated_data.get('start_time').replace(day=1).strftime('%U'))
+        day = validated_data.get('date').weekday() + 1
+        week = int(validated_data.get('date').strftime('%U')) - int(
+            validated_data.get('date').replace(day=1).strftime('%U'))
         start_lesson_number = LessonsTimes.get_lesson_number(validated_data.get('start_time'))
         end_lesson_number = LessonsTimes.get_lesson_number(validated_data.get('end_time'))
         timetable = None
@@ -53,12 +54,13 @@ class EventTimetableSerializer(serializers.ModelSerializer):
                 day=WeekDays.objects.get(id=day),
                 week=week % 2,
                 lesson_number=LessonsTimes.objects.get(id=lesson_number),
-                start_time=validated_data.get('start_time'),
-                end_time=validated_data.get('end_time'),
+                start_time=datetime.combine(validated_data.get('date'), validated_data.get('start_time')),
+                end_time=datetime.combine(validated_data.get('date'), validated_data.get('end_time')),
+                once=validated_data.get('once')
             )
             timetable.save()
         if not timetable:
-            raise ParseError
+            raise ValidationError
         return timetable
 
 
@@ -75,7 +77,7 @@ class LessonTimetableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Timetable
-        fields = ('id', 'lesson', 'group', 'teacher', 'room', 'day', 'week', 'lesson_number')
+        fields = ('id', 'lesson', 'group', 'teacher', 'room', 'day', 'week', 'lesson_number', 'once')
 
 
 class WeekDaysSerializer(serializers.ModelSerializer):

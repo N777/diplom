@@ -89,6 +89,7 @@ export default {
         day: this.day,
         lesson_number: this.lesson_number,
         week: this.week,
+        lesson_type: 0,
       };
     },
   },
