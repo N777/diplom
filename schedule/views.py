@@ -1,14 +1,18 @@
 from datetime import timedelta
 
 from django.db.models import Q
+from django.http import HttpResponse
+from django.views import View
 from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
 from rest_framework import mixins, viewsets
 from rest_framework.filters import SearchFilter
+from rest_framework.views import APIView
 
 from schedule.filters import TimetableFilter
 from schedule.models import *
 from schedule.serializers import *
+from schedule.services import TimetablePrintService
 
 
 # TODO что делать с 2-СЗ
@@ -32,13 +36,29 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         return union_qs
 
 
-class TimetablePrintViewSet(viewsets.GenericViewSet):
+# http://127.0.0.1:8000/api/print-timetable/?groups=%D0%98%D0%92%D0%A2%D0%90%D0%9F%D0%B1%D0%B4-21
+class TimetablePrintView(APIView):
+    service = TimetablePrintService
     queryset = Timetable.objects.filter(once=False)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+    def get(self, request):
+        group_names = request.GET.get('groups', '')
+        group_names = [group.strip() for group in group_names.split(',')]
+        schedule_content = ''
+        # Ваш код для генерации расписания для указанных групп
+        for find in group_names:
+            qs = self.queryset.filter(
+                Q(group__name__contains=find) | Q(room__number__contains=find) | Q(teacher__name__contains=find))
+            schedule_content += self.service().get_timetable_html(qs)
 
+        # # Ниже приведен пример генерации расписания в виде текстового файла
+        # schedule_content = "Расписание для групп: {}\n".format(", ".join(group_names))
+        # schedule_content += "...\n"  # Здесь должны быть реальные данные расписания
 
+        # Создание и возврат файла в ответе
+        response = HttpResponse(schedule_content, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename="schedule.html"'
+        return response
 
 
 class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):

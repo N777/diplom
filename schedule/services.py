@@ -8,7 +8,6 @@ from django.db.models import QuerySet
 from django.template.loader import render_to_string
 
 from schedule.models import Timetable, Lesson, Room, Teacher, Group, WeekDays, NumbersOfWeek, LessonsTimes
-from schedule.views import TimetableViewSet
 
 LESSON_TYPES = {
     'пр': 'practice',
@@ -124,9 +123,11 @@ class TimetablePrintService:
         return grouped_data
 
     def get_timetable_html(self, query_set: QuerySet):
+        timetable = ''
         for i, week in NumbersOfWeek.choices:
             week_queryset = query_set.filter(week=i)
-            self.get_week_timetable_html(week_queryset, week)
+            timetable += self.get_week_timetable_html(week_queryset, week)
+        return timetable
 
     def get_week_timetable_html(self, query_set: QuerySet, week: str):
         query_set = query_set.order_by('day_id')
