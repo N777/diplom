@@ -49,7 +49,7 @@ class TimetablePrintView(APIView):
         for find in group_names:
             qs = self.queryset.filter(
                 Q(group__name__contains=find) | Q(room__number__contains=find) | Q(teacher__name__contains=find))
-            schedule_content += self.service().get_timetable_html(qs)
+            schedule_content += self.service().get_timetable_html(qs, find)
 
         # # Ниже приведен пример генерации расписания в виде текстового файла
         # schedule_content = "Расписание для групп: {}\n".format(", ".join(group_names))

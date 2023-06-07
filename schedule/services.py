@@ -122,14 +122,14 @@ class TimetablePrintService:
                 grouped_data[category] = [item]
         return grouped_data
 
-    def get_timetable_html(self, query_set: QuerySet):
+    def get_timetable_html(self, query_set: QuerySet, name: str):
         timetable = ''
         for i, week in NumbersOfWeek.choices:
             week_queryset = query_set.filter(week=i)
-            timetable += self.get_week_timetable_html(week_queryset, week)
+            timetable += self.get_week_timetable_html(week_queryset, week, name)
         return timetable
 
-    def get_week_timetable_html(self, query_set: QuerySet, week: str):
+    def get_week_timetable_html(self, query_set: QuerySet, week: str, name: str):
         query_set = query_set.order_by('day_id')
         data = list(query_set.values('lesson__name', 'group__name', 'lesson_number_id', 'room__number', 'teacher__name',
                                      'lesson_type', 'day_id'))
@@ -139,6 +139,7 @@ class TimetablePrintService:
             grouped_data[key] = grouped_item
         data = {'table': grouped_data,
                 'week': week,
+                'name': name,
                 'week_days': self.week_day,
                 'day_iterator': range(1, 8),
                 'lesson_iterator': range(1, 9)}
