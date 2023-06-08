@@ -63,6 +63,7 @@ class LessonsTimes(models.Model):
                 next_times = lessons_times[i].end_time
             if times <= need_time < next_times:
                 return lessons_times[i].id
+        raise ValidationError("Ошибка определения в расписании времени проведения")
 
 
 class Timetable(models.Model):
@@ -74,10 +75,11 @@ class Timetable(models.Model):
     room = models.ForeignKey(Room, on_delete=models.DO_NOTHING)
     day = models.ForeignKey(WeekDays, on_delete=models.DO_NOTHING)
     week = models.IntegerField(choices=NumbersOfWeek.choices)
-    lesson_number = models.ForeignKey(LessonsTimes, null=True, validators=[MinValueValidator(1), MaxValueValidator(8)],
+    lesson_number = models.ForeignKey(LessonsTimes, validators=[MinValueValidator(1), MaxValueValidator(8)],
                                       on_delete=models.DO_NOTHING)
-    start_time = models.DateTimeField(null=True)
-    end_time = models.DateTimeField(null=True)
+    date = models.DateField(null=True)
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField(null=True)
     once = models.BooleanField(default=False, null=False)
 
     def clean(self):
