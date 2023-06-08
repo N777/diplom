@@ -30,6 +30,7 @@
 
 <script>
 import Axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
   name: "VDeleteTimetableModal",
@@ -37,13 +38,15 @@ export default {
     timetable_id: Number,
   },
   methods: {
+    ...mapActions(["GET_TIMETABLE"]),
     deleteTimetable: function (id) {
-      Axios.get(`api/timetable/${id}/`).then((res) => {
+      Axios.delete(`api/timetable/${id}/`).then((res) => {
         this.$store.state.timetable = this.$store.state.timetable.filter(
           function (f) {
             return f.id !== id;
           }
         );
+        this.GET_TIMETABLE(this.$route.params.timetable);
         this.dialog = false;
         console.log(res);
       });

@@ -35,6 +35,14 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         union_qs = Timetable.objects.filter(regular_filter | current_events_filter)
         return union_qs
 
+    def perform_destroy(self, instance):
+        if instance.date:
+            qs_to_delete = Timetable.objects.filter(date=instance.date, start_time=instance.start_time,
+                                                    end_time=instance.end_time)
+            qs_to_delete.delete()
+        else:
+            instance.delete()
+
 
 # http://127.0.0.1:8000/api/print-timetable/?groups=%D0%98%D0%92%D0%A2%D0%90%D0%9F%D0%B1%D0%B4-21
 class TimetablePrintView(APIView):

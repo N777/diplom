@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row no-gutters>
-      <p>Неделя номер: {{ weekNumber + 1 }}</p>
+      <p>{{ weekNumber ? "Нечётная" : "Чётная" }} неделя</p>
     </v-row>
     <v-row no-gutters>
       <v-col ref="basecell" class="lesson">Пара Время</v-col>

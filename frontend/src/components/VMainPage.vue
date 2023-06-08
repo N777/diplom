@@ -8,6 +8,7 @@
     </v-app-bar>
     <v-main>
       <VTimeTable v-if="timetable" v-bind:timetable="timetable"></VTimeTable>
+      <VPrintModal class="print-button"></VPrintModal>
     </v-main>
   </v-app>
 </template>
@@ -16,10 +17,11 @@
 import VSearch from "./VSearch.vue";
 import VTimeTable from "./VTimeTable.vue";
 import VLoginModal from "./VLoginModal.vue";
+import VPrintModal from "./VPrintModal.vue";
 
 export default {
   data: () => ({ loginDialog: false }),
-  components: { VSearch, VTimeTable, VLoginModal },
+  components: { VSearch, VTimeTable, VLoginModal, VPrintModal },
   props: ["timetable"],
   name: "VMainPage",
   computed: {},
@@ -29,4 +31,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.print-button {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+}
+</style>

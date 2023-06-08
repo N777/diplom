@@ -57,7 +57,7 @@ export default {
     ...mapState(["isAuth", "userInfo"]),
   },
   methods: {
-    ...mapActions(["addToken", "deleteToken"]),
+    ...mapActions(["addToken", "deleteToken", "getUserInfo"]),
     submitLoginForm() {
       const formData = {
         email: this.email,
@@ -65,6 +65,7 @@ export default {
       };
       axios.post("auth/token/login", formData).then((response) => {
         this.addToken(response.data.auth_token);
+        this.getUserInfo();
         this.dialog = false;
       });
     },
