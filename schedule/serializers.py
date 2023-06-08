@@ -29,9 +29,9 @@ class EventTimetableSerializer(serializers.ModelSerializer):
 
     lesson = serializers.CharField()
     room = serializers.SlugRelatedField(queryset=Room.objects.all(), slug_field='number')
-    date = serializers.DateField(required=True, write_only=True)
-    start_time = serializers.TimeField(required=True, write_only=True)
-    end_time = serializers.TimeField(required=True, write_only=True)
+    date = serializers.DateField(required=True)
+    start_time = serializers.TimeField(required=True)
+    end_time = serializers.TimeField(required=True)
 
     class Meta:
         model = Timetable
@@ -54,8 +54,9 @@ class EventTimetableSerializer(serializers.ModelSerializer):
                 day=WeekDays.objects.get(id=day),
                 week=week % 2,
                 lesson_number=LessonsTimes.objects.get(id=lesson_number),
-                start_time=datetime.combine(validated_data.get('date'), validated_data.get('start_time')),
-                end_time=datetime.combine(validated_data.get('date'), validated_data.get('end_time')),
+                date=validated_data.get('date'),
+                start_time=validated_data.get('start_time'),
+                end_time=validated_data.get('end_time'),
                 once=validated_data.get('once')
             )
             timetable.save()

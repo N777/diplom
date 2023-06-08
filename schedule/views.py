@@ -31,7 +31,7 @@ class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         start_of_week = today - timedelta(days=today.weekday())
         end_of_second_week = start_of_week + timedelta(days=14)
         regular_filter = Q(once=False)
-        current_events_filter = Q(start_time__gte=start_of_week) & Q(end_time__lte=end_of_second_week) & Q(once=True)
+        current_events_filter = Q(date__gte=start_of_week) & Q(date__lte=end_of_second_week) & Q(once=True)
         union_qs = Timetable.objects.filter(regular_filter | current_events_filter)
         return union_qs
 

@@ -74,19 +74,19 @@
               v-if="isTypeEvent"
               v-model="modalData.date"
               type="date"
-              label="Начало"
+              label="Дата проведение"
             />
             <v-text-field
               v-if="isTypeEvent"
               v-model="modalData.start_time"
               type="time"
-              label="Начало"
+              label="Время начала"
             />
             <v-text-field
               v-if="isTypeEvent"
               v-model="modalData.end_time"
               type="time"
-              label="Конец"
+              label="Время конца"
             />
             <v-text-field
               v-if="!isTypeEvent"
