@@ -9,15 +9,43 @@
         </v-card-title>
         <v-card-text>
           <v-select
-            v-model="selected"
-            :items="search_items"
-            label="Favorite Fruits"
+            v-model="selectedGroups"
+            :items="groups"
+            label="Группы"
             multiple
           >
             <template v-slot:prepend-item>
-              <v-list-item title="Select All" @click="toggle">
+              <v-list-item title="Выбрать все" @click="toggleGroups">
                 <template v-slot:prepend>
-                  <v-checkbox-btn :model-value="someSelected"></v-checkbox-btn>
+                  <v-checkbox-btn :model-value="someGroups"></v-checkbox-btn>
+                </template>
+              </v-list-item>
+            </template>
+          </v-select>
+          <v-select
+            v-model="selectedTeachers"
+            :items="teachers"
+            label="Преподаватели"
+            multiple
+          >
+            <template v-slot:prepend-item>
+              <v-list-item title="Выбрать все" @click="toggleTeachers">
+                <template v-slot:prepend>
+                  <v-checkbox-btn :model-value="someTeachers"></v-checkbox-btn>
+                </template>
+              </v-list-item>
+            </template>
+          </v-select>
+          <v-select
+            v-model="selectedRooms"
+            :items="rooms"
+            label="Аудитории"
+            multiple
+          >
+            <template v-slot:prepend-item>
+              <v-list-item title="Выбрать все" @click="toggleRooms">
+                <template v-slot:prepend>
+                  <v-checkbox-btn :model-value="someRooms"></v-checkbox-btn>
                 </template>
               </v-list-item>
             </template>
@@ -39,34 +67,55 @@ export default {
   name: "VPrintModal",
   data: () => ({
     dialog: false,
-    selected: [],
+    selectedGroups: [],
+    selectedTeachers: [],
+    selectedRooms: [],
   }),
 
   computed: {
     ...mapState(["groups", "teachers", "rooms"]),
-    search_items() {
-      return [...this.groups, ...this.rooms, ...this.teachers];
+    someGroups() {
+      return this.selectedGroups.length > 0;
     },
-    allSelected() {
-      return this.selected.length === this.search_items.length;
+    someTeachers() {
+      return this.selectedTeachers.length > 0;
     },
-    someSelected() {
-      return this.selected.length > 0;
+    someRooms() {
+      return this.selectedRooms.length > 0;
     },
   },
 
   methods: {
-    toggle() {
-      if (this.allSelected) {
-        this.selected = [];
+    toggleGroups() {
+      if (this.selectedGroups.length === this.groups.length) {
+        this.selectedGroups = [];
       } else {
-        this.selected = this.search_items.slice();
+        this.selectedGroups = this.groups.slice();
+      }
+    },
+    toggleTeachers() {
+      if (this.selectedTeachers.length === this.teachers.length) {
+        this.selectedTeachers = [];
+      } else {
+        this.selectedTeachers = this.teachers.slice();
+      }
+    },
+    toggleRooms() {
+      if (this.selectedRooms.length === this.rooms.length) {
+        this.selectedRooms = [];
+      } else {
+        this.selectedRooms = this.rooms.slice();
       }
     },
     getTimetableHTML() {
+      const selectedItems = [
+        ...this.selectedGroups,
+        ...this.selectedRooms,
+        ...this.selectedTeachers,
+      ];
       axios
         .get("api/print-timetable/", {
-          params: { groups: this.selected.toString() },
+          params: { groups: selectedItems.toString() },
         })
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -74,7 +123,7 @@ export default {
           // Создайте ссылку для загрузки файла
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${this.selected.toString()}.html`); // Замените 'file_name.extension' на имя файла с расширением
+          link.setAttribute("download", `${selectedItems.toString()}.html`); // Замените 'file_name.extension' на имя файла с расширением
 
           // Добавьте ссылку в DOM и автоматически щелкните по ней, чтобы начать загрузку
           document.body.appendChild(link);
