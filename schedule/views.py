@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from schedule.filters import TimetableFilter
 from schedule.models import *
 from schedule.serializers import *
-from schedule.services import TimetablePrintService
+from schedule.services import TimetablePrintService, TimetableParseService
 
 
 class TimetableViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet,
@@ -63,6 +63,14 @@ class TimetablePrintView(APIView):
         response = HttpResponse(schedule_content, content_type='text/plain')
         response['Content-Disposition'] = 'attachment; filename="schedule.html"'
         return response
+
+
+class TimetableResetView(APIView):
+    service = TimetableParseService
+
+    def post(self, request):
+        self.service().reset_timetable()
+        return Response()
 
 
 class EventTimetableViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):

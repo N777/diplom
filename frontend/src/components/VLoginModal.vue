@@ -4,6 +4,7 @@
       <template v-slot:activator="{ props }">
         <div v-if="isAuth" class="d-flex justify-space-between align-center">
           <v-chip>{{ userInfo?.email }}</v-chip>
+          <VResetTimetableModal></VResetTimetableModal>
           <v-btn v-on:click="deleteToken">Выйти</v-btn>
         </div>
         <v-btn v-else color="primary" v-bind="props"> Войти</v-btn>
@@ -47,8 +48,10 @@
 <script>
 import axios from "axios";
 import { mapActions, mapState } from "vuex";
+import VResetTimetableModal from "./VResetTimetableModal.vue";
 
 export default {
+  components: { VResetTimetableModal },
   data: () => ({ dialog: false, email: "", password: "" }),
   props: {
     openDialog: Boolean,

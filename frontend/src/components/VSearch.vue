@@ -8,7 +8,7 @@
     label="Поиск"
     variant="underlined"
     @keydown.enter="find"
-    style="min-width: 80vw"
+    style="min-width: 70vw"
   ></v-autocomplete>
 </template>
 

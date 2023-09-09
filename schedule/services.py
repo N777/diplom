@@ -38,6 +38,15 @@ class ApiTimetable:
 class TimetableParseService:
     session = requests.Session()
 
+    def reset_timetable(self):
+        self.auth_on_ulstu()
+        groups = self.get_groups().get('response')
+        need_groups = list(filter(lambda group: 'ИВТ' in group, groups))
+        Timetable.objects.all().delete()
+        for group in need_groups:
+            timetable = self.get_timetable_by_group(group)
+            self.parse_timetable(timetable['response'])
+
     def auth_on_ulstu(self):
         log_data = {
             'login': 'egorov.v',
@@ -83,7 +92,7 @@ class TimetableParseService:
             teacher=teacher,
             room=room,
             day=day,
-            week=int(timetable.week) % 2,
+            week=(int(timetable.week) - 1) % 2,
             lesson_number=lesson_number
         )
 

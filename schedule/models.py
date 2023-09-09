@@ -11,8 +11,8 @@ User = get_user_model()
 
 
 class NumbersOfWeek(models.IntegerChoices):
-    EVEN = 0, 'Чётная'
     ODD = 1, 'Нечётная'
+    EVEN = 0, 'Чётная'
 
 
 class Lesson(models.Model):

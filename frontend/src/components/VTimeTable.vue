@@ -1,7 +1,7 @@
 <template>
   <VTable
     v-if="TIMETABLE"
-    v-for="(n, week) in 2"
+    v-for="week in [1, 0]"
     :timetable="getTimeTableForWeek(week)"
     :weekNumber="week"
   ></VTable>

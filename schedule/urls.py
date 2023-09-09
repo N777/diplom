@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from diplom import settings
 from schedule import views
-from schedule.views import TimetablePrintView
+from schedule.views import TimetablePrintView, TimetableResetView
 
 router = routers.SimpleRouter()
 router.include_root_view = settings.DEBUG
@@ -24,4 +24,5 @@ urlpatterns = [
     # path('', index, name='index'),
     path('', include(router.urls)),
     path('print-timetable/', TimetablePrintView.as_view(), name='generate_schedule'),
+    path('reset-timetable/', TimetableResetView.as_view(), name='reset_schedule'),
 ]
