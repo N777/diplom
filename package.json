@@ -4,5 +4,11 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.14.1"
+  },
+  "eslintConfig": {
+  "extends": ["strict/es5"],
+  "rules": {
+    "no-extra-boolean-cast": 0
   }
+}
 }

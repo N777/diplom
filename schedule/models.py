@@ -1,10 +1,13 @@
 import datetime
 
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # Create your models here.
 from rest_framework.exceptions import ValidationError
+
+User = get_user_model()
 
 
 class NumbersOfWeek(models.IntegerChoices):
@@ -27,8 +30,8 @@ class Group(models.Model):
 
 
 class Teacher(models.Model):
-    # TODO сделать наследование от User
     name = models.CharField(max_length=255)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name

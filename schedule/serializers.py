@@ -1,9 +1,6 @@
-from datetime import datetime
-from enum import Enum
-
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError, ValidationError
+from rest_framework.exceptions import ValidationError
 
 from schedule.models import Timetable, Group, WeekDays, NumbersOfWeek, Lesson, Teacher, Room, LessonsTimes
 

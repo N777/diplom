@@ -113,24 +113,22 @@ export default {
         ...this.selectedRooms,
         ...this.selectedTeachers,
       ];
+      if (selectedItems.length === 0) {
+        return;
+      }
       axios
         .get("api/print-timetable/", {
-          params: { groups: selectedItems.toString() },
+          params: { names: selectedItems.toString() },
         })
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
-
-          // Создайте ссылку для загрузки файла
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${selectedItems.toString()}.html`); // Замените 'file_name.extension' на имя файла с расширением
-
-          // Добавьте ссылку в DOM и автоматически щелкните по ней, чтобы начать загрузку
+          link.setAttribute("download", `${selectedItems.toString()}.html`);
           document.body.appendChild(link);
           link.click();
-
-          // Удалите ссылку из DOM
           document.body.removeChild(link);
+          this.dialog = false;
         });
     },
   },
